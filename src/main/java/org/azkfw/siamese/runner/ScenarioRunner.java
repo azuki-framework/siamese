@@ -17,8 +17,10 @@
  */
 package org.azkfw.siamese.runner;
 
+
 /**
- *
+ * シナリオを実行機能を定義したインターフェース
+ * 
  * @author Kawakicchi
  */
 public interface ScenarioRunner {
@@ -29,4 +31,11 @@ public interface ScenarioRunner {
 	 * @param name シナリオ名
 	 */
 	void run(final String name);
+
+	/**
+	 * シナリオを実行する。
+	 *
+	 * @param names シナリオ名群
+	 */
+	void run(final String... names);
 }

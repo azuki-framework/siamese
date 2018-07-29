@@ -17,18 +17,22 @@
  */
 package org.azkfw.siamese.scenario.loader;
 
+import org.azkfw.siamese.exception.ScenarioFormatException;
 import org.azkfw.siamese.scenario.ScenarioSet;
 
 /**
- *
+ * シナリオ読込み機能を定義したインターフェース
+ * 
  * @author Kawakicchi
  */
 public interface ScenarioLoader {
 
 	/**
 	 * シナリオをロードする。
+	 * 
+	 * @throws ScenarioFormatException シナリオが不正な場合
 	 */
-	void load();
+	void load() throws ScenarioFormatException;
 
 	/**
 	 * ロードしたシナリオセットを取得する。

@@ -17,7 +17,6 @@
  */
 package org.azkfw.siamese.runner;
 
-import org.azkfw.siamese.scenario.ScenarioSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,16 +29,25 @@ public abstract class AbstractScenarioRunner implements ScenarioRunner {
 	/** Logger */
 	private static final Logger logger = LoggerFactory.getLogger(AbstractScenarioRunner.class);
 
-	private final ScenarioSet scenarioSet;
-
-	public AbstractScenarioRunner(final ScenarioSet scenarioSet) {
-		this.scenarioSet = scenarioSet;
+	public AbstractScenarioRunner() {
 	}
 
 	@Override
 	public final void run(final String name) {
-		doRun(name);
+		doRunScenario(name);
 	}
 
-	protected abstract void doRun(final String name);
+	@Override
+	public final void run(final String... names) {
+		for (String name : names) {
+			doRunScenario(name);
+		}
+	}
+
+	/**
+	 * シナリオを実行する。
+	 *
+	 * @param name シナリオ名
+	 */
+	protected abstract void doRunScenario(final String name);
 }

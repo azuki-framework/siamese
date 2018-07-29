@@ -17,7 +17,11 @@
  */
 package org.azkfw.siamese.runner;
 
+import org.azkfw.siamese.exception.ScenarioNotFoundException;
+import org.azkfw.siamese.scenario.Scenario;
 import org.azkfw.siamese.scenario.ScenarioSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -25,15 +29,35 @@ import org.azkfw.siamese.scenario.ScenarioSet;
  */
 public class BasicScenarioRunner extends AbstractScenarioRunner {
 
+	/** Logger */
+	private static final Logger logger = LoggerFactory.getLogger(BasicScenarioRunner.class);
+
+	private final ScenarioSet scenarioSet;
+
+	/**
+	 * コンストラクタ
+	 *
+	 * @param scenarioSet シナリオセット
+	 */
 	private BasicScenarioRunner(final ScenarioSet scenarioSet) {
-		super(scenarioSet);
+		this.scenarioSet = scenarioSet;
 	}
 
-	protected void doRun(final String name) {
+	@Override
+	protected void doRunScenario(final String name) {
+
+		try {
+			logger.debug("run scenario.[{}]", name);
+			final Scenario scenario = scenarioSet.getScenario(name);
+
+		} catch (ScenarioNotFoundException ex) {
+			logger.error("Not found scenaio.[{}]", name);
+		}
 
 	}
 
 	public static class BasicScenarioRunnerBuilder {
+
 		private ScenarioSet scenarioSet;
 
 		public static BasicScenarioRunnerBuilder newBuilder() {

@@ -24,7 +24,7 @@ import java.util.List;
  * 
  * @author Kawakicchi
  */
-public interface Scenario {
+public interface Scenario extends Iterable<Command> {
 
 	/**
 	 * シナリオ名 を取得する。

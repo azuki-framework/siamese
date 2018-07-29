@@ -15,31 +15,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.azkfw.siamese.scenario;
-
-import java.util.List;
-
-import org.azkfw.siamese.exception.ScenarioNotFoundException;
+package org.azkfw.siamese.exception;
 
 /**
- *
+ * シナリオのフォーマットが不正な場合の例外クラス
+ * 
  * @author Kawakicchi
  */
-public interface ScenarioSet extends Iterable<Scenario> {
+public class ScenarioFormatException extends Exception {
 
-	/**
-	 * シナリオ一覧 を取得する。
-	 *
-	 * @return シナリオ一覧
-	 */
-	List<Scenario> getScenarios();
+	public ScenarioFormatException() {
+		super();
+	}
 
-	/**
-	 * シナリオ を取得する。
-	 *
-	 * @param name シナリオ名
-	 * @return シナリオ
-	 * @throws ScenarioNotFoundException シナリオが見つからない場合
-	 */
-	Scenario getScenario(String name) throws ScenarioNotFoundException;
+	public ScenarioFormatException(final Throwable cause) {
+		super(cause);
+	}
+
+	public ScenarioFormatException(final String message, final Throwable cause) {
+		super(message, cause);
+	}
 }

@@ -22,6 +22,7 @@ import java.io.File;
 import org.azkfw.siamese.browser.Browser;
 import org.azkfw.siamese.browser.Window;
 import org.azkfw.siamese.browser.selenium.SeleniumBrowser;
+import org.azkfw.siamese.exception.ScenarioFormatException;
 import org.azkfw.siamese.runner.BasicScenarioRunner;
 import org.azkfw.siamese.runner.BasicScenarioRunner.BasicScenarioRunnerBuilder;
 import org.azkfw.siamese.scenario.ScenarioSet;
@@ -37,7 +38,7 @@ public class Application {
 
 	public static void main(String[] args) {
 		Application app = new Application();
-		app.run();
+		app.run1();
 	}
 
 	public void run() {
@@ -63,21 +64,26 @@ public class Application {
 	}
 
 	public void run1() {
-		final File dir = new File("/Users/Kawakicchi/workspace/workflow/siamese/tmp");
+		final File dir = new File("tmp");
 
-		final ExcelScenarioLoaderBuilder builderLoader = ExcelScenarioLoaderBuilder.newBuilder();
-		builderLoader.addTargetDirectory(dir);
+		try {
+			final ExcelScenarioLoaderBuilder builderLoader = ExcelScenarioLoaderBuilder.newBuilder();
+			builderLoader.addTargetDirectory(dir);
 
-		final ExcelScenarioLoader loader = builderLoader.build();
-		loader.load();
+			final ExcelScenarioLoader loader = builderLoader.build();
+			loader.load();
 
-		final ScenarioSet scenarioSet = loader.getScenarioSet();
+			final ScenarioSet scenarioSet = loader.getScenarioSet();
 
-		final BasicScenarioRunnerBuilder builderRunner = BasicScenarioRunnerBuilder.newBuilder();
-		builderRunner.setScenarioSet(scenarioSet);
+			final BasicScenarioRunnerBuilder builderRunner = BasicScenarioRunnerBuilder.newBuilder();
+			builderRunner.setScenarioSet(scenarioSet);
 
-		final BasicScenarioRunner runner = builderRunner.build();
-		runner.run("サンプルシナリオ");
+			final BasicScenarioRunner runner = builderRunner.build();
+			runner.run("サンプルシナリオ");
+
+		} catch (ScenarioFormatException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 }

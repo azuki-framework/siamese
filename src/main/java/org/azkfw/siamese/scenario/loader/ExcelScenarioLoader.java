@@ -23,24 +23,31 @@ import static org.azkfw.siamese.util.SiamesUtil.trim;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.azkfw.siamese.excel.ExcelUtil;
+import org.azkfw.siamese.exception.ScenarioFormatException;
+import org.azkfw.siamese.exception.ScenarioNotFoundException;
 import org.azkfw.siamese.scenario.Command;
 import org.azkfw.siamese.scenario.Scenario;
+import org.azkfw.siamese.scenario.ScenarioSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.monitorjbl.xlsx.StreamingReader;
 
 /**
- *
+ * 
  * @author Kawakicchi
  */
 public class ExcelScenarioLoader extends AbstractScenarioLoader {
@@ -48,19 +55,58 @@ public class ExcelScenarioLoader extends AbstractScenarioLoader {
 	/** Logger */
 	private static final Logger logger = LoggerFactory.getLogger(ExcelScenarioLoader.class);
 
+	/** ディレクトリ一覧 */
+	private final List<File> directories;
+
+	/** シナリオセット */
+	private final MyScenarioSet scenarioSet;
+
 	private ExcelScenarioLoader(final List<File> directorys) {
-		super(directorys);
+		this.directories = new ArrayList<File>(directorys);
+		this.scenarioSet = new MyScenarioSet();
 	}
 
 	@Override
-	protected void doLoad(final File file) {
+	public final ScenarioSet getScenarioSet() {
+		return scenarioSet;
+	}
+
+	@Override
+	protected void doLoad() throws ScenarioFormatException {
+		for (File dir : directories) {
+			final List<File> files = getFiles(dir);
+			for (File file : files) {
+				doLoad(file);
+			}
+		}
+	}
+
+	private boolean addScenario(final Scenario scenario) {
+		final boolean result = scenarioSet.addScenario(scenario);
+		if (result) {
+			logger.debug("load scenario.[{}]", scenario.getName());
+		} else {
+			logger.warn("Duplicate scenario name.[{}]", scenario.getName());
+		}
+		return result;
+	}
+
+	private void doLoad(final File file) throws ScenarioFormatException {
 		InputStream is = null;
 		try {
 			is = new FileInputStream(file);
 			final Workbook workbook = StreamingReader.builder().rowCacheSize(100).bufferSize(4096).open(is);
 			load(workbook);
 		} catch (FileNotFoundException ex) {
-			ex.printStackTrace();
+			throw new ScenarioFormatException("Scenario excel file not found.", ex);
+		} finally {
+			if (null != is) {
+				try {
+					is.close();
+				} catch (IOException ex) {
+					logger.warn("File close error.", ex);
+				}
+			}
 		}
 	}
 
@@ -129,7 +175,9 @@ public class ExcelScenarioLoader extends AbstractScenarioLoader {
 					arguments.add(argument4);
 					arguments.add(argument5);
 
-					final MyCommand command = new MyCommand(cmdName, arguments, option, false);
+					boolean skip = "#".equals(control);
+
+					final MyCommand command = new MyCommand(cmdName, arguments, option, skip);
 					commands.add(command);
 				}
 				break;
@@ -139,6 +187,90 @@ public class ExcelScenarioLoader extends AbstractScenarioLoader {
 
 		final MyScenario scenario = new MyScenario(name, memo, commands);
 		addScenario(scenario);
+	}
+
+	private List<File> getFiles(final File file) {
+		final List<File> files = new ArrayList<File>();
+		if (file.isDirectory()) {
+			dir(file, files);
+		} else if (file.isFile()) {
+			file(file, files);
+		} else {
+			logger.warn("Unknown file.[{}]", file);
+		}
+		return files;
+	}
+
+	private void file(final File file, final List<File> files) {
+		final String name = file.getName().toLowerCase();
+		if (!name.endsWith(".xlsx")) {
+			return;
+		}
+		if (name.startsWith("~$")) {
+			return;
+		}
+		files.add(file);
+	}
+
+	private void dir(final File dir, final List<File> files) {
+		final String name = dir.getName();
+		if (name.startsWith(".")) {
+			return;
+		}
+
+		final File[] fs = dir.listFiles();
+		for (File f : fs) {
+			if (f.isDirectory()) {
+				dir(f, files);
+			} else if (f.isFile()) {
+				file(f, files);
+			}
+		}
+	}
+
+	private static class MyScenarioSet implements ScenarioSet {
+
+		private final Map<String, Scenario> map;
+		private final List<Scenario> list;
+
+		public MyScenarioSet() {
+			map = new HashMap<String, Scenario>();
+			list = new ArrayList<Scenario>();
+		}
+
+		public boolean addScenario(final Scenario scenario) {
+			boolean result = false;
+			if (!map.containsKey(scenario.getName())) {
+				map.put(scenario.getName(), scenario);
+				list.add(scenario);
+				result = true;
+			} else {
+
+			}
+			return result;
+		}
+
+		@Override
+		public List<Scenario> getScenarios() {
+			return new ArrayList<Scenario>(list);
+		}
+
+		@Override
+		public Scenario getScenario(final String name) throws ScenarioNotFoundException {
+			Scenario scenario = null;
+			if (map.containsKey(name)) {
+				scenario = map.get(name);
+			}
+			if (null == scenario) {
+				throw new ScenarioNotFoundException(String.format("Not found scenario.[%s]", name));
+			}
+			return scenario;
+		}
+
+		@Override
+		public Iterator<Scenario> iterator() {
+			return list.iterator();
+		}
 	}
 
 	private static class MyScenario implements Scenario {
@@ -166,6 +298,11 @@ public class ExcelScenarioLoader extends AbstractScenarioLoader {
 		@Override
 		public List<Command> getCommands() {
 			return commands;
+		}
+
+		@Override
+		public Iterator<Command> iterator() {
+			return commands.iterator();
 		}
 	}
 
