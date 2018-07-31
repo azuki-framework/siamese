@@ -23,7 +23,7 @@ import java.util.Set;
 
 import org.azkfw.siamese.browser.Browser;
 import org.azkfw.siamese.browser.Window;
-import org.azkfw.siamese.util.SiamesUtil;
+import org.azkfw.siamese.util.SiameseUtil;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -75,7 +75,7 @@ public class SeleniumBrowser implements Browser {
 	public Window window(final String title) {
 		for (Window w : windows()) {
 			final String t = w.title();
-			if (SiamesUtil.isEquals(title, t)) {
+			if (SiameseUtil.isEquals(title, t)) {
 				return w;
 			}
 		}

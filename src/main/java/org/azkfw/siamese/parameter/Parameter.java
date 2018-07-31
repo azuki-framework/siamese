@@ -30,6 +30,10 @@ public interface Parameter {
 
 	Object getObject(String name, Object defVal);
 
+	String getString(String name);
+
+	String getString(String name, String defVal);
+
 	Integer getInteger(String name);
 
 	Integer getInteger(String name, Integer defVal);

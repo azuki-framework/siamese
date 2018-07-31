@@ -15,52 +15,50 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.azkfw.siamese.action.parameter;
+package org.azkfw.siamese.plugin;
+
+import org.azkfw.siamese.action.Action;
+import org.azkfw.siamese.scenario.Command;
 
 /**
  *
  * @author Kawakicchi
+ *
  */
-public class ParameterAction extends AbstractParameterAction {
+public abstract class AbstractPlugin implements Plugin {
 
-	/** パラメータ名 */
-	private String name;
-	/** パラメータ値 */
-	private String value;
-
-	public ParameterAction() {
-
-	}
-
-	public ParameterAction(final String name, final String value) {
-		this.name = name;
-		this.value = value;
-	}
-
-	/**
-	 * パラメータ名を設定する。
-	 *
-	 * @param name パラメータ名
-	 */
-	public void setName(final String name) {
-		this.name = name;
-	}
-
-	/**
-	 * パラメータ値を設定する。
-	 *
-	 * @param value パラメータ値
-	 */
-	public void setValue(final String value) {
-		this.value = value;
+	@Override
+	public void load() {
+		doLoad();
 	}
 
 	@Override
-	protected final void doExecute() {
-		final String dName = decoration(name);
-		final String dValue = decoration(value);
-
-		setParameter(dName, dValue);
+	public void initialize() {
+		doInitialize();
 	}
 
+	@Override
+	public void terminate() {
+		doTerminate();
+	}
+
+	@Override
+	public Action getAction(final Command command) {
+		return doGetAction(command);
+	}
+
+	@Override
+	public void support(final Action action) {
+		doSupport(action);
+	}
+
+	protected abstract void doLoad();
+
+	protected abstract void doInitialize();
+
+	protected abstract void doTerminate();
+
+	protected abstract Action doGetAction(Command command);
+
+	protected abstract void doSupport(Action action);
 }

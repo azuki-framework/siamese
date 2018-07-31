@@ -15,52 +15,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.azkfw.siamese.action.parameter;
+package org.azkfw.siamese.action;
 
 /**
  *
  * @author Kawakicchi
  */
-public class ParameterAction extends AbstractParameterAction {
+public class EchoAction extends AbstractAction {
 
-	/** パラメータ名 */
-	private String name;
-	/** パラメータ値 */
-	private String value;
+	/** メッセージ */
+	private String message;
 
-	public ParameterAction() {
+	public EchoAction() {
 
 	}
 
-	public ParameterAction(final String name, final String value) {
-		this.name = name;
-		this.value = value;
+	public EchoAction(final String message) {
+		this.message = message;
 	}
 
 	/**
-	 * パラメータ名を設定する。
+	 * メッセージを設定する。
 	 *
-	 * @param name パラメータ名
+	 * @param message
 	 */
-	public void setName(final String name) {
-		this.name = name;
-	}
-
-	/**
-	 * パラメータ値を設定する。
-	 *
-	 * @param value パラメータ値
-	 */
-	public void setValue(final String value) {
-		this.value = value;
+	public void setMessage(final String message) {
+		this.message = message;
 	}
 
 	@Override
-	protected final void doExecute() {
-		final String dName = decoration(name);
-		final String dValue = decoration(value);
+	protected void doExecute() {
 
-		setParameter(dName, dValue);
+		final String dMessage = decoration(message);
+
+		System.out.println(dMessage);
 	}
 
 }

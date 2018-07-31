@@ -15,37 +15,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.azkfw.siamese.util;
+package org.azkfw.siamese.plugin;
+
+import org.azkfw.siamese.action.Action;
+import org.azkfw.siamese.scenario.Command;
 
 /**
  *
  * @author Kawakicchi
  */
-public class SiamesUtil {
+public interface Plugin {
 
-	public static String trim(final String string) {
-		String s = null;
-		if (null != string) {
-			s = string.trim();
-		}
-		return s;
-	}
+	void load();
 
-	public static boolean isEquals(final String string1, final String string2) {
-		if (null == string1 && null == string2) {
-			return true;
-		} else if (null != string1 && null != string2) {
-			return string1.equals(string2);
-		} else {
-			return false;
-		}
-	}
+	void initialize();
 
-	public static boolean isEmpty(final String string) {
-		return (null == string || 0 == string.length());
-	}
+	void terminate();
 
-	public static boolean isNotEmpty(final String string) {
-		return (!isEmpty(string));
-	}
+	Action getAction(Command command);
+
+	void support(Action action);
 }

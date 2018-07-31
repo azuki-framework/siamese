@@ -17,6 +17,9 @@
  */
 package org.azkfw.siamese.action;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.azkfw.siamese.action.parameter.ParameterSupport;
 import org.azkfw.siamese.parameter.Parameter;
 
@@ -51,10 +54,30 @@ public abstract class AbstractAction implements Action, ParameterSupport {
 		return parameter;
 	}
 
+	protected final void setParameter(final String name, final Object value) {
+		parameter.put(name, value);
+	}
+
 	protected final String decoration(final String str) {
-		String s = str;
-		// TODO:
-		return s;
+		final Pattern p = Pattern.compile("(\\$\\{([^\\}]*)\\})");
+
+		final Matcher m = p.matcher(str);
+		final StringBuilder s = new StringBuilder();
+		int i = 0;
+		while (m.find(i)) {
+			s.append(str.substring(i, m.start(1)));
+
+			String r = parameter.getString(m.group(2));
+			if (null != r) {
+				s.append(r);
+			} else {
+				s.append(m.group(1));
+			}
+
+			i = m.end(1);
+		}
+		s.append(str.substring(i));
+		return s.toString();
 	}
 
 	@Override

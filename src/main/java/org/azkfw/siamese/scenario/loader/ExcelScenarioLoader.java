@@ -17,8 +17,8 @@
  */
 package org.azkfw.siamese.scenario.loader;
 
-import static org.azkfw.siamese.util.SiamesUtil.isNotEmpty;
-import static org.azkfw.siamese.util.SiamesUtil.trim;
+import static org.azkfw.siamese.util.SiameseUtil.isNotEmpty;
+import static org.azkfw.siamese.util.SiameseUtil.trim;
 
 import java.io.File;
 import java.io.FileInputStream;

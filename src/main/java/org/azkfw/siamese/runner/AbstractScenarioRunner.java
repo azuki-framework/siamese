@@ -17,6 +17,11 @@
  */
 package org.azkfw.siamese.runner;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.azkfw.siamese.action.browser.BrowserPlugin;
+import org.azkfw.siamese.plugin.Plugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,19 +34,59 @@ public abstract class AbstractScenarioRunner implements ScenarioRunner {
 	/** Logger */
 	private static final Logger logger = LoggerFactory.getLogger(AbstractScenarioRunner.class);
 
+	private final List<Plugin> plugins;
+
 	public AbstractScenarioRunner() {
+		plugins = new ArrayList<Plugin>();
+
+		// TODO:
+		plugins.add(new BrowserPlugin());
+	}
+
+	private void setup() {
+		for (Plugin plugin : plugins) {
+			plugin.load();
+		}
+	}
+
+	private void teardown() {
+
+	}
+
+	private void initialize() {
+		for (Plugin plugin : plugins) {
+			plugin.initialize();
+		}
+	}
+
+	private void terminate() {
+		for (Plugin plugin : plugins) {
+			plugin.terminate();
+		}
+	}
+
+	protected final List<Plugin> getPlugins() {
+		return plugins;
 	}
 
 	@Override
 	public final void run(final String name) {
+		setup();
+		initialize();
 		doRunScenario(name);
+		terminate();
+		teardown();
 	}
 
 	@Override
 	public final void run(final String... names) {
+		setup();
 		for (String name : names) {
+			initialize();
 			doRunScenario(name);
+			terminate();
 		}
+		teardown();
 	}
 
 	/**

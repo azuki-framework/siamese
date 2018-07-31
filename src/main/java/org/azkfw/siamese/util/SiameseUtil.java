@@ -15,52 +15,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.azkfw.siamese.action.parameter;
+package org.azkfw.siamese.util;
 
 /**
  *
  * @author Kawakicchi
  */
-public class ParameterAction extends AbstractParameterAction {
+public class SiameseUtil {
 
-	/** パラメータ名 */
-	private String name;
-	/** パラメータ値 */
-	private String value;
-
-	public ParameterAction() {
-
+	public static String trim(final String string) {
+		String s = null;
+		if (null != string) {
+			s = string.trim();
+		}
+		return s;
 	}
 
-	public ParameterAction(final String name, final String value) {
-		this.name = name;
-		this.value = value;
+	public static boolean isEquals(final String string1, final String string2) {
+		if (null == string1 && null == string2) {
+			return true;
+		} else if (null != string1 && null != string2) {
+			return string1.equals(string2);
+		} else {
+			return false;
+		}
 	}
 
-	/**
-	 * パラメータ名を設定する。
-	 *
-	 * @param name パラメータ名
-	 */
-	public void setName(final String name) {
-		this.name = name;
+	public static boolean isEmpty(final String string) {
+		return (null == string || 0 == string.length());
 	}
 
-	/**
-	 * パラメータ値を設定する。
-	 *
-	 * @param value パラメータ値
-	 */
-	public void setValue(final String value) {
-		this.value = value;
+	public static boolean isNotEmpty(final String string) {
+		return (!isEmpty(string));
 	}
-
-	@Override
-	protected final void doExecute() {
-		final String dName = decoration(name);
-		final String dValue = decoration(value);
-
-		setParameter(dName, dValue);
-	}
-
 }
