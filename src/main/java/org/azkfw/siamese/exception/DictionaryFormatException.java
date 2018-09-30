@@ -22,6 +22,7 @@ package org.azkfw.siamese.exception;
  * 
  * @author Kawakicchi
  */
+@SuppressWarnings("serial")
 public class DictionaryFormatException extends Exception {
 
 	public DictionaryFormatException() {
