@@ -15,57 +15,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.azkfw.siamese.browser;
+package org.azkfw.siamese.dictionary;
 
 /**
- * このインターフェースは、ブラウザウィンドウ機能を定義するインターフェースです。
- *
+ * ディクショナリ機能を定義したインターフェース
+ * 
  * @author Kawakicchi
  */
-public interface Window {
+public interface Dictionary {
 
 	/**
-	 * タイトルを取得する。
+	 * ディクショナリ名 を取得する。
 	 *
-	 * @return タイトル
+	 * @return ディクショナリ名
 	 */
-	String title();
+	String getName();
 
 	/**
-	 * ソースを取得する。
-	 *
-	 * @return ソース
-	 */
-	String source();
-
-	/**
-	 * ウィンドウの位置を変更する。
-	 *
-	 * @param x X座標
-	 * @param y Y座標
-	 */
-	void move(int x, int y);
-
-	/**
-	 * ウィンドウのサイズを変更する。
-	 *
-	 * @param width 幅
-	 * @param height 高さ
-	 */
-	void size(int width, int height);
-
-	/**
-	 * 入力する。
+	 * 項目 を取得する。
 	 *
 	 * @param name 名前
-	 * @param value 値
+	 * @return 値
 	 */
-	void input(final String name, final String value);
-
-	/**
-	 * クリックする。
-	 *
-	 * @param name 名前
-	 */
-	void click(final String name);
+	Item lookup(String name);
 }

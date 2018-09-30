@@ -22,7 +22,8 @@ import java.util.List;
 import org.azkfw.siamese.exception.ScenarioNotFoundException;
 
 /**
- *
+ * シナリオセット機能を定義したインターフェース
+ * 
  * @author Kawakicchi
  */
 public interface ScenarioSet extends Iterable<Scenario> {

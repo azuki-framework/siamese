@@ -38,6 +38,8 @@ public class SeleniumBrowser implements Browser {
 	/** WebDriver */
 	private WebDriver driver;
 
+	private SeleniumWindow window;
+
 	public SeleniumBrowser() {
 	}
 
@@ -76,9 +78,15 @@ public class SeleniumBrowser implements Browser {
 		for (Window w : windows()) {
 			final String t = w.title();
 			if (SiameseUtil.isEquals(title, t)) {
+				this.window = (SeleniumWindow) w;
 				return w;
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public Window window() {
+		return this.window;
 	}
 }

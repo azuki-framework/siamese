@@ -27,7 +27,6 @@ import org.azkfw.siamese.util.SiameseUtil;
 /**
  *
  * @author Kawakicchi
- *
  */
 public class BrowserPlugin extends AbstractPlugin {
 
@@ -52,12 +51,25 @@ public class BrowserPlugin extends AbstractPlugin {
 	protected Action doGetAction(final Command command) {
 		final String name = command.getName();
 
-		if (SiameseUtil.isEquals(name, "BROWSER.OPEN")) {
+		if (SiameseUtil.isEquals(name, "BROWSER.INPUT")) {
+			final BrowserInputAction a = new BrowserInputAction();
+			a.setName(command.getArguments().get(0));
+			a.setValue(command.getArguments().get(1));
+			return a;
+		} else if (SiameseUtil.isEquals(name, "BROWSER.CLICK")) {
+			final BrowserClickAction a = new BrowserClickAction();
+			a.setName(command.getArguments().get(0));
+			return a;
+		} else if (SiameseUtil.isEquals(name, "BROWSER.OPEN")) {
 			final BrowserOpenAction a = new BrowserOpenAction();
 			a.setUrl(command.getArguments().get(0));
 			return a;
 		} else if (SiameseUtil.isEquals(name, "BROWSER.CLOSE")) {
 			final BrowserCloseAction a = new BrowserCloseAction();
+			return a;
+		} else if (SiameseUtil.isEquals(name, "BROWSER.WINDOW")) {
+			final BrowserWindowAction a = new BrowserWindowAction();
+			a.setTitle(command.getArguments().get(0));
 			return a;
 		}
 

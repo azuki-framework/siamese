@@ -30,17 +30,18 @@ import org.azkfw.siamese.scenario.Command;
 import org.azkfw.siamese.scenario.Scenario;
 import org.azkfw.siamese.scenario.ScenarioSet;
 import org.azkfw.siamese.scenario.loader.ExcelScenarioLoader.ExcelScenarioLoaderBuilder;
+import org.azkfw.siamese.test.AbstractTestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- *
+ * {@link ExcelScenarioLoader} の検証を行うためのクラス
+ * 
  * @author Kawakicchi
- *
  */
 @RunWith(JUnit4.class)
-public class ExcelScenarioLoaderTest {
+public class ExcelScenarioLoaderTest extends AbstractTestCase {
 
 	@Test
 	public void nodata_noTargetDirectory() throws ScenarioFormatException {

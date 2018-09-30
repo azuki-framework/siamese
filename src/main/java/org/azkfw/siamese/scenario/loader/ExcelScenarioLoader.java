@@ -41,12 +41,14 @@ import org.azkfw.siamese.exception.ScenarioNotFoundException;
 import org.azkfw.siamese.scenario.Command;
 import org.azkfw.siamese.scenario.Scenario;
 import org.azkfw.siamese.scenario.ScenarioSet;
+import org.azkfw.siamese.util.SiameseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.monitorjbl.xlsx.StreamingReader;
 
 /**
+ * エクセルファイルのシナリオを読込むローダークラス
  * 
  * @author Kawakicchi
  */
@@ -61,6 +63,11 @@ public class ExcelScenarioLoader extends AbstractScenarioLoader {
 	/** シナリオセット */
 	private final MyScenarioSet scenarioSet;
 
+	/**
+	 * コンストラクタ
+	 *
+	 * @param directorys シナリオファイルを格納したディレクトリ
+	 */
 	private ExcelScenarioLoader(final List<File> directorys) {
 		this.directories = new ArrayList<File>(directorys);
 		this.scenarioSet = new MyScenarioSet();
@@ -74,21 +81,11 @@ public class ExcelScenarioLoader extends AbstractScenarioLoader {
 	@Override
 	protected void doLoad() throws ScenarioFormatException {
 		for (File dir : directories) {
-			final List<File> files = getFiles(dir);
+			final List<File> files = SiameseUtil.getFiles(dir);
 			for (File file : files) {
 				doLoad(file);
 			}
 		}
-	}
-
-	private boolean addScenario(final Scenario scenario) {
-		final boolean result = scenarioSet.addScenario(scenario);
-		if (result) {
-			logger.debug("load scenario.[{}]", scenario.getName());
-		} else {
-			logger.warn("Duplicate scenario name.[{}]", scenario.getName());
-		}
-		return result;
 	}
 
 	private void doLoad(final File file) throws ScenarioFormatException {
@@ -189,43 +186,14 @@ public class ExcelScenarioLoader extends AbstractScenarioLoader {
 		addScenario(scenario);
 	}
 
-	private List<File> getFiles(final File file) {
-		final List<File> files = new ArrayList<File>();
-		if (file.isDirectory()) {
-			dir(file, files);
-		} else if (file.isFile()) {
-			file(file, files);
+	private boolean addScenario(final Scenario scenario) {
+		final boolean result = scenarioSet.addScenario(scenario);
+		if (result) {
+			logger.debug("load scenario.[{}]", scenario.getName());
 		} else {
-			logger.warn("Unknown file.[{}]", file);
+			logger.warn("Duplicate scenario name.[{}]", scenario.getName());
 		}
-		return files;
-	}
-
-	private void file(final File file, final List<File> files) {
-		final String name = file.getName().toLowerCase();
-		if (!name.endsWith(".xlsx")) {
-			return;
-		}
-		if (name.startsWith("~$")) {
-			return;
-		}
-		files.add(file);
-	}
-
-	private void dir(final File dir, final List<File> files) {
-		final String name = dir.getName();
-		if (name.startsWith(".")) {
-			return;
-		}
-
-		final File[] fs = dir.listFiles();
-		for (File f : fs) {
-			if (f.isDirectory()) {
-				dir(f, files);
-			} else if (f.isFile()) {
-				file(f, files);
-			}
-		}
+		return result;
 	}
 
 	private static class MyScenarioSet implements ScenarioSet {

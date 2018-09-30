@@ -15,48 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.azkfw.siamese.browser;
-
-import java.util.List;
+package org.azkfw.siamese.test;
 
 /**
- * このインターフェースは、ブラウザ機能を定義するインターフェースです。
- * 
+ *
  * @author Kawakicchi
  */
-public interface Browser {
+public abstract class AbstractTestCase {
 
-	/**
-	 * ブラウザを開く。
-	 * 
-	 * @param url URL
-	 */
-	void open(String url);
-
-	/**
-	 * ブラウザを閉じる。
-	 */
-	void close();
-
-	/**
-	 * ウィンドウ一覧を取得する。
-	 *
-	 * @return ウィンドウ一覧
-	 */
-	List<Window> windows();
-
-	/**
-	 * タイトル名からウィンドウを取得する。
-	 *
-	 * @param title タイトル名
-	 * @return ウィンドウ
-	 */
-	Window window(String title);
-
-	/**
-	 * カレントウインドウを取得する。
-	 *
-	 * @return ウインドウ
-	 */
-	Window window();
 }

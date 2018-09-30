@@ -15,48 +15,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.azkfw.siamese.browser;
-
-import java.util.List;
+package org.azkfw.siamese.exception;
 
 /**
- * このインターフェースは、ブラウザ機能を定義するインターフェースです。
+ * シナリオのフォーマットが不正な場合の例外クラス
  * 
  * @author Kawakicchi
  */
-public interface Browser {
+public class DictionaryFormatException extends Exception {
 
-	/**
-	 * ブラウザを開く。
-	 * 
-	 * @param url URL
-	 */
-	void open(String url);
+	public DictionaryFormatException() {
+		super();
+	}
 
-	/**
-	 * ブラウザを閉じる。
-	 */
-	void close();
+	public DictionaryFormatException(final Throwable cause) {
+		super(cause);
+	}
 
-	/**
-	 * ウィンドウ一覧を取得する。
-	 *
-	 * @return ウィンドウ一覧
-	 */
-	List<Window> windows();
-
-	/**
-	 * タイトル名からウィンドウを取得する。
-	 *
-	 * @param title タイトル名
-	 * @return ウィンドウ
-	 */
-	Window window(String title);
-
-	/**
-	 * カレントウインドウを取得する。
-	 *
-	 * @return ウインドウ
-	 */
-	Window window();
+	public DictionaryFormatException(final String message, final Throwable cause) {
+		super(message, cause);
+	}
 }

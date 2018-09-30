@@ -17,6 +17,10 @@
  */
 package org.azkfw.siamese.util;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Kawakicchi
@@ -47,5 +51,51 @@ public class SiameseUtil {
 
 	public static boolean isNotEmpty(final String string) {
 		return (!isEmpty(string));
+	}
+
+	public static boolean isNotEmptyAll(final String... strings) {
+		for (String s : strings) {
+			if (isEmpty(s)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static List<File> getFiles(final File file) {
+		final List<File> files = new ArrayList<File>();
+		if (file.isDirectory()) {
+			dir(file, files);
+		} else if (file.isFile()) {
+			file(file, files);
+		}
+		return files;
+	}
+
+	private static void file(final File file, final List<File> files) {
+		final String name = file.getName().toLowerCase();
+		if (!name.endsWith(".xlsx")) {
+			return;
+		}
+		if (name.startsWith("~$")) {
+			return;
+		}
+		files.add(file);
+	}
+
+	private static void dir(final File dir, final List<File> files) {
+		final String name = dir.getName();
+		if (name.startsWith(".")) {
+			return;
+		}
+
+		final File[] fs = dir.listFiles();
+		for (File f : fs) {
+			if (f.isDirectory()) {
+				dir(f, files);
+			} else if (f.isFile()) {
+				file(f, files);
+			}
+		}
 	}
 }

@@ -15,48 +15,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.azkfw.siamese.browser;
-
-import java.util.List;
+package org.azkfw.siamese.exception;
 
 /**
- * このインターフェースは、ブラウザ機能を定義するインターフェースです。
+ * シナリオが見つからない場合の例外クラス
  * 
  * @author Kawakicchi
  */
-public interface Browser {
+public class DictionaryNotFoundException extends Exception {
 
-	/**
-	 * ブラウザを開く。
-	 * 
-	 * @param url URL
-	 */
-	void open(String url);
+	public DictionaryNotFoundException() {
+		super();
+	}
 
-	/**
-	 * ブラウザを閉じる。
-	 */
-	void close();
+	public DictionaryNotFoundException(final String message) {
+		super(message);
+	}
 
-	/**
-	 * ウィンドウ一覧を取得する。
-	 *
-	 * @return ウィンドウ一覧
-	 */
-	List<Window> windows();
+	public DictionaryNotFoundException(final Throwable cause) {
+		super(cause);
+	}
 
-	/**
-	 * タイトル名からウィンドウを取得する。
-	 *
-	 * @param title タイトル名
-	 * @return ウィンドウ
-	 */
-	Window window(String title);
-
-	/**
-	 * カレントウインドウを取得する。
-	 *
-	 * @return ウインドウ
-	 */
-	Window window();
+	public DictionaryNotFoundException(final String message, final Throwable cause) {
+		super(message, cause);
+	}
 }

@@ -18,9 +18,12 @@
 package org.azkfw.siamese.browser.selenium;
 
 import org.azkfw.siamese.browser.Window;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 /**
  *
@@ -71,4 +74,36 @@ public class SeleniumWindow implements Window {
 		driver.manage().window().setSize(new Dimension(width, height));
 	}
 
+	@Override
+	public void input(final String name, final String value) {
+		driver.switchTo().window(handleId);
+
+		final WebElement e = driver.findElement(by(name));
+
+		new Actions(driver).moveToElement(e).perform();
+
+		// e.clear();
+
+		new Actions(driver).sendKeys(e, value).perform();
+	}
+
+	@Override
+	public void click(final String name) {
+		driver.switchTo().window(handleId);
+
+		final WebElement e = driver.findElement(by(name));
+
+		new Actions(driver).moveToElement(e).click(e).perform();
+
+	}
+
+	private By by(final String name) {
+		if (name.startsWith("id:")) {
+			return By.id(name.substring(3));
+		} else if (name.startsWith("name:")) {
+			return By.name(name.substring(5));
+		} else {
+			return By.name(name);
+		}
+	}
 }

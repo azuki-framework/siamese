@@ -15,57 +15,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.azkfw.siamese.browser;
+package org.azkfw.siamese.dictionary.loader;
+
+import org.azkfw.siamese.dictionary.DictionarySet;
+import org.azkfw.siamese.exception.DictionaryFormatException;
 
 /**
- * このインターフェースは、ブラウザウィンドウ機能を定義するインターフェースです。
- *
+ * ディクショナリ読込み機能を定義したインターフェース
+ * 
  * @author Kawakicchi
  */
-public interface Window {
+public interface DictionaryLoader {
 
 	/**
-	 * タイトルを取得する。
+	 * ディクショナリをロードする。
 	 *
-	 * @return タイトル
+	 * @throws DictionaryFormatException ディクショナリが不正な場合
 	 */
-	String title();
+	void load() throws DictionaryFormatException;
 
 	/**
-	 * ソースを取得する。
+	 * ロードしたディクショナリセットを取得する。
 	 *
-	 * @return ソース
+	 * @return ディクショナリセット
 	 */
-	String source();
-
-	/**
-	 * ウィンドウの位置を変更する。
-	 *
-	 * @param x X座標
-	 * @param y Y座標
-	 */
-	void move(int x, int y);
-
-	/**
-	 * ウィンドウのサイズを変更する。
-	 *
-	 * @param width 幅
-	 * @param height 高さ
-	 */
-	void size(int width, int height);
-
-	/**
-	 * 入力する。
-	 *
-	 * @param name 名前
-	 * @param value 値
-	 */
-	void input(final String name, final String value);
-
-	/**
-	 * クリックする。
-	 *
-	 * @param name 名前
-	 */
-	void click(final String name);
+	DictionarySet getDictionarySet();
 }

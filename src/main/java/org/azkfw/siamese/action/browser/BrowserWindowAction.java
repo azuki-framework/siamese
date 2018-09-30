@@ -15,57 +15,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.azkfw.siamese.browser;
+package org.azkfw.siamese.action.browser;
 
 /**
- * このインターフェースは、ブラウザウィンドウ機能を定義するインターフェースです。
  *
  * @author Kawakicchi
  */
-public interface Window {
+public class BrowserWindowAction extends AbstractBrowserAction {
+
+	/** タイトル */
+	private String title;
 
 	/**
-	 * タイトルを取得する。
+	 * タイトル を設定する。
 	 *
-	 * @return タイトル
+	 * @param title 名前
 	 */
-	String title();
+	public void setTitle(final String title) {
+		this.title = title;
+	}
 
-	/**
-	 * ソースを取得する。
-	 *
-	 * @return ソース
-	 */
-	String source();
+	@Override
+	public final void doExecute() {
 
-	/**
-	 * ウィンドウの位置を変更する。
-	 *
-	 * @param x X座標
-	 * @param y Y座標
-	 */
-	void move(int x, int y);
+		final String dTitle = decoration(title);
 
-	/**
-	 * ウィンドウのサイズを変更する。
-	 *
-	 * @param width 幅
-	 * @param height 高さ
-	 */
-	void size(int width, int height);
-
-	/**
-	 * 入力する。
-	 *
-	 * @param name 名前
-	 * @param value 値
-	 */
-	void input(final String name, final String value);
-
-	/**
-	 * クリックする。
-	 *
-	 * @param name 名前
-	 */
-	void click(final String name);
+		getBrowser().window(dTitle);
+	}
 }
